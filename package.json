@@ -1,0 +1,21 @@
+{
+  "name": "eolas-api",
+  "version": "0.0.0",
+  "description": "API for interacting with my Zettelkasten database",
+  "license": "ISC",
+  "author": "Thomas Bishop",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "eslint": "^9.20.0",
+    "eslint-config-prettier": "^10.0.1",
+    "eslint-plugin-prettier": "^5.2.3",
+    "prettier": "^3.5.0"
+  }
+}
