@@ -1,12 +1,14 @@
 {
   "name": "eolas-api",
   "version": "0.0.0",
-  "description": "API for interacting with my Zettelkasten database",
+  "description": "API for interacting with Eolas, my Zettelkasten database",
   "license": "ISC",
   "author": "Thomas Bishop",
   "type": "module",
+  "imports": {},
   "main": "index.js",
   "scripts": {
+    "start": "NODE_OPTIONS='--experimental-sqlite' nodemon src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
@@ -16,6 +18,7 @@
     "eslint": "^9.20.0",
     "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-prettier": "^5.2.3",
+    "nodemon": "^3.1.10",
     "prettier": "^3.5.0"
   }
 }
