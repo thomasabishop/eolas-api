@@ -18,10 +18,9 @@ export default class EntriesService {
             .all()
             .slice(0, Number(limit) || -1)
 
-        if (sort === "date") {
-            return sortByDate(entries)
+        return {
+            count: entries.length,
+            entries: sort === "date" ? sortByDate(entries) : sortByTitle(entries),
         }
-
-        return sortByTitle(entries)
     }
 }
