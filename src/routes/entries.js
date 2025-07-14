@@ -1,12 +1,13 @@
 import express from "express"
-import { EntriesService } from "../services/EntriesService"
-import { EntriesController } from "../controllers/EntriesController"
-import { EntriesService } from "../services/EntriesService"
+import { EntriesService } from "../services/EntriesService.js"
+import { EntriesController } from "../controllers/EntriesController.js"
+import database from "../db/connection.js"
 
 const router = express.Router()
-const entriesService = new EntriesService()
+const entriesService = new EntriesService(database)
 const entriesController = new EntriesController(entriesService)
 
-router.get("/:entry", entriesController.getEntry)
+router.get("/", entriesController.getAllEntries)
+router.get("/:title", entriesController.getEntry)
 
 export default router
