@@ -1,6 +1,6 @@
 import express from "express"
-import { EntriesService } from "../services/EntriesService.js"
-import { EntriesController } from "../controllers/EntriesController.js"
+import EntriesService from "../services/EntriesService.js"
+import EntriesController from "../controllers/EntriesController.js"
 import database from "../db/connection.js"
 
 const router = express.Router()

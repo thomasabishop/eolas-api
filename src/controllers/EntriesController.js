@@ -1,4 +1,4 @@
-export class EntriesController {
+export default class EntriesController {
     entriesService
 
     constructor(entriesService) {

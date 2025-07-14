@@ -1,7 +1,7 @@
 import { sortByDate, sortByTitle } from "../lib/sorters.js"
 import { GET_ALL_ENTRIES, GET_ENTRY } from "../sql/entries.js"
 
-export class EntriesService {
+export default class EntriesService {
     database
 
     constructor(database) {
