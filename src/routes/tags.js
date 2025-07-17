@@ -8,5 +8,6 @@ const tagsService = new TagsService(database)
 const tagsController = new TagsController(tagsService)
 
 router.get("/", tagsController.getAllTags)
+router.get("/:entryTitle", tagsController.getTagsForEntry)
 
 export default router
