@@ -7,12 +7,12 @@ export default class TagsService {
         this.database = database
     }
 
-    sortTags = (tags) => {
-        return tags.sort((a, b) => a.name.localeCompare(b.name))
+    getAllTags = () => {
+        const tags = this._sortTags(this.database.prepare(GET_ALL_TAGS).all()).flatMap((tag) => tag.name)
+        return { count: tags.length, tags: tags }
     }
 
-    getAllTags = () => {
-        const tags = this.sortTags(this.database.prepare(GET_ALL_TAGS).all()).flatMap((tag) => tag.name)
-        return { count: tags.length, tags: tags }
+    _sortTags = (tags) => {
+        return tags.sort((a, b) => a.name.localeCompare(b.name))
     }
 }
