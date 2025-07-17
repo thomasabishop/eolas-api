@@ -1,4 +1,3 @@
-import { sortByDate, sortByTitle } from "../lib/sorters.js"
 import { GET_ALL_ENTRIES, GET_ENTRY, GET_ENTRIES_FOR_TAG } from "../sql/entries.js"
 
 export default class EntriesService {
@@ -20,7 +19,7 @@ export default class EntriesService {
 
         return {
             count: entries.length,
-            entries: sort === "date" ? sortByDate(entries) : sortByTitle(entries),
+            entries: sort === "date" ? this._sortByDate(entries) : this._sortByTitle(entries, "title"),
         }
     }
 
