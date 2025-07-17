@@ -9,5 +9,5 @@ const entriesController = new EntriesController(entriesService)
 
 router.get("/", entriesController.getAllEntries)
 router.get("/:title", entriesController.getEntry)
-
+router.get("/tag/:tag", entriesController.getEntriesForTag)
 export default router

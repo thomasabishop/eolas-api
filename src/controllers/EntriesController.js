@@ -28,4 +28,16 @@ export default class EntriesController {
 
         return res.json(entries)
     }
+
+    getEntriesForTag = (req, res) => {
+        const tag = req.params.tag
+        const sort = req.query.sort
+        const entries = this.entriesService.getEntriesForTag(tag, sort)
+        if (!entries) {
+            return res.status(404).json({
+                message: `Could not retrieve entries for tag ${tag}`,
+            })
+        }
+        return res.json(entries)
+    }
 }
