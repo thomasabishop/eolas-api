@@ -12,14 +12,14 @@ export default class EntriesService {
     }
 
     getAllEntries = (sort, limit) => {
-        const entries = this.database
-            .prepare(GET_ALL_ENTRIES)
-            .all()
-            .slice(0, Number(limit) || -1)
+        const entries = this.database.prepare(GET_ALL_ENTRIES).all()
+
+        const sorted =
+            sort === "date" ? this._sortByDate(entries) : this._sortByTitle(entries, "title")
 
         return {
             count: entries.length,
-            entries: sort === "date" ? this._sortByDate(entries) : this._sortByTitle(entries, "title"),
+            entries: sorted.slice(0, Number(limit) || -1),
         }
     }
 
@@ -27,7 +27,10 @@ export default class EntriesService {
         const entries = this.database.prepare(GET_ENTRIES_FOR_TAG).all(tag)
         return {
             count: entries.length,
-            entries: sort === "date" ? this._sortByDate(entries) : this._sortByTitle(entries, "entry_title"),
+            entries:
+                sort === "date"
+                    ? this._sortByDate(entries)
+                    : this._sortByTitle(entries, "entry_title"),
         }
     }
 
@@ -35,7 +38,16 @@ export default class EntriesService {
         return entries.sort((a, b) => a[fieldName].localeCompare(b[fieldName]))
     }
 
-    _sortByDate = (entries, fieldName = last_modified) => {
-        return entries.sort((a, b) => new Date(b[fieldName]) - new Date(a[fieldName]))
+    _sortByDate = (entries, fieldName = "last_modified") => {
+        console.log(
+            "Before sort:",
+            entries.slice(0, 2).map((e) => e.last_modified),
+        )
+        const sorted = entries.sort((a, b) => new Date(b[fieldName]) - new Date(a[fieldName]))
+        console.log(
+            "After sort:",
+            sorted.slice(0, 2).map((e) => e.last_modified),
+        )
+        return sorted
     }
 }
