@@ -2,6 +2,6 @@ export default {
 	semi: false,
 	trailingComma: "all",
 	singleQuote: false,
-	printWidth: 120,
+	printWidth: 100,
 	tabWidth: 4,
 }
