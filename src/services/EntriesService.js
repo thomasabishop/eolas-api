@@ -17,9 +17,11 @@ export default class EntriesService {
         const sorted =
             sort === "date" ? this._sortByDate(entries) : this._sortByTitle(entries, "title")
 
+        const sliced = sorted.slice(0, Number(limit) || -1)
+
         return {
-            count: entries.length,
-            entries: sorted.slice(0, Number(limit) || -1),
+            count: sliced.length,
+            entries: sliced,
         }
     }
 
