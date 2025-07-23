@@ -39,15 +39,7 @@ export default class EntriesService {
     }
 
     _sortByDate = (entries, fieldName = "last_modified") => {
-        console.log(
-            "Before sort:",
-            entries.slice(0, 2).map((e) => e.last_modified),
-        )
         const sorted = entries.sort((a, b) => new Date(b[fieldName]) - new Date(a[fieldName]))
-        console.log(
-            "After sort:",
-            sorted.slice(0, 2).map((e) => e.last_modified),
-        )
         return sorted
     }
 }
