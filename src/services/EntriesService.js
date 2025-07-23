@@ -21,7 +21,7 @@ export default class EntriesService {
 
         return {
             count: sliced.length,
-            entries: sliced,
+            data: sliced,
         }
     }
 
@@ -29,7 +29,7 @@ export default class EntriesService {
         const entries = this.database.prepare(GET_ENTRIES_FOR_TAG).all(tag)
         return {
             count: entries.length,
-            entries:
+            data:
                 sort === "date"
                     ? this._sortByDate(entries)
                     : this._sortByTitle(entries, "entry_title"),
