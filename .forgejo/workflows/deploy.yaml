@@ -10,6 +10,6 @@ jobs:
       - run: |
           echo "${{ secrets.SSH_FORGEJO_KEY }}" > /tmp/ssh_key
           chmod 600 /tmp/ssh_key
-          ssh -i /tmp/ssh_key -o StrictHostKeyChecking=no ${{ vars.VPS_USER }} "bash -c 'cd /var/www/eolas-api && find . -mindepth 1 -not -name \".env\" -delete'"
+          ssh -i /tmp/ssh_key -o StrictHostKeyChecking=no ${{ vars.VPS_USER }} "bash -c 'cd /var/www/eolas-api && rm -rf * .[^.]*'"
           scp -i /tmp/ssh_key -o StrictHostKeyChecking=no -r ./* ${{ vars.VPS_USER }}:/var/www/eolas-api/
           rm /tmp/ssh_key
