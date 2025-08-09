@@ -29,6 +29,31 @@ export default class EntriesController {
         return res.json(entries)
     }
 
+    getBacklinksForEntry = (req, res) => {
+        const title = req.params.title
+        const entries = this.entriesService.getBacklinksForEntry(title)
+        if (!entries) {
+            return res.status(404).json({
+                message: `Backlinks could not be retrieved for entry ${title}`,
+            })
+        }
+
+        return res.json(entries)
+    }
+
+    getOutlinksForEntry = (req, res) => {
+        const title = req.params.title
+        const entries = this.entriesService.getOutlinksForEntry(title)
+        if (!entries) {
+            return res.status(404).json({
+                message: `Outlinks could not be retrieved for entry ${title}`,
+            })
+        }
+
+        return res.json(entries)
+    }
+
+
     getEntriesForTag = (req, res) => {
         const tag = req.params.tag
         const sort = req.query.sort

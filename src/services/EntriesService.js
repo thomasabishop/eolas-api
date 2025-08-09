@@ -1,4 +1,4 @@
-import { GET_ALL_ENTRIES, GET_ENTRY, GET_ENTRIES_FOR_TAG } from "../sql/entries.js"
+import { GET_ALL_ENTRIES, GET_ENTRY, GET_ENTRIES_FOR_TAG, GET_BACKLINKS_FOR_ENTRY, GET_OUTLINKS_FOR_ENTRY } from "../sql/entries.js"
 
 export default class EntriesService {
     database
@@ -34,6 +34,27 @@ export default class EntriesService {
                     ? this._sortByDate(entries)
                     : this._sortByTitle(entries, "entry_title"),
         }
+    }
+
+    getBacklinksForEntry = (title) => {
+        const backlinks = this.database.prepare(GET_BACKLINKS_FOR_ENTRY).all(title)
+        const sorted = this._sortByTitle(backlinks, "source_entry_title")
+        const list = sorted.flatMap((i) => i.source_entry_title)
+        return {
+            count: backlinks.length,
+            data: list
+        }
+    }
+
+    getOutlinksForEntry = (title) => {
+        const outlinks = this.database.prepare(GET_OUTLINKS_FOR_ENTRY).all(title)
+        const sorted = this._sortByTitle(outlinks, "target_entry_title")
+        const list = sorted.flatMap((i) => i.target_entry_title)
+        return {
+            count: outlinks.length,
+            data: list
+        }
+
     }
 
     _sortByTitle = (entries, fieldName) => {
