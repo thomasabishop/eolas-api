@@ -1,0 +1,16 @@
+name: Deploy eolas-api
+on:
+  push:
+    branches: [main]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    container: node:18
+    steps:
+      - uses: actions/checkout@v3
+      - run: |
+          echo "${{ secrets.SSH_FORGEJO_KEY }}" > /tmp/ssh_key
+          chmod 600 /tmp/ssh_key
+          ssh -i /tmp/ssh_key -o StrictHostKeyChecking=no ${{ vars.VPS_USER }} "bash -c 'cd /var/www/eolas-api && find . -mindepth 1 -not -name \".env\" -delete'"
+          scp -i /tmp/ssh_key -o StrictHostKeyChecking=no -r ./* ${{ vars.VPS_USER }}:/var/www/eolas-api/
+          rm /tmp/ssh_key
