@@ -10,9 +10,6 @@ jobs:
       - run: |
           echo "${{ secrets.VPS_DEPLOY_USER_SSH_KEY }}" > /tmp/ssh_key
           chmod 600 /tmp/ssh_key
-          ssh -i /tmp/ssh_key -o StrictHostKeyChecking=no ${{ vars.VPS_DEPLOY_USER }} "bash -c 'pwd'"
-          ssh -i /tmp/ssh_key -o StrictHostKeyChecking=no ${{ vars.VPS_DEPLOY_USER }} "bash -c 'whoami'"
-          ssh -i /tmp/ssh_key -o StrictHostKeyChecking=no ${{ vars.VPS_DEPLOY_USER }} "bash -c 'cd /var/www/eolas-api && ls'"
-          # ssh -i /tmp/ssh_key -o StrictHostKeyChecking=no ${{ vars.VPS_DEPLOY_USER }} "bash -c 'cd /var/www/eolas-api && rm -rf * .[^.]*'"
+          ssh -i /tmp/ssh_key -o StrictHostKeyChecking=no ${{ vars.VPS_DEPLOY_USER }} "bash -c 'cd /var/www/eolas-api && rm -rf * .[^.]*'"
           scp -i /tmp/ssh_key -o StrictHostKeyChecking=no -r ./* ${{ vars.VPS_DEPLOY_USER }}:/var/www/eolas-api/
           rm /tmp/ssh_key
