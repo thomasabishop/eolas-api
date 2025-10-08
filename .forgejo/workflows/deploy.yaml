@@ -60,6 +60,9 @@ jobs:
           echo "new_tag=$new_tag" >> $GITHUB_OUTPUT
           echo "new_version=$new_version" >> $GITHUB_OUTPUT
 
+          # Save commit message for later (escape newlines)
+          echo "$commit_msg" > /tmp/commit_msg.txt
+
           # Update package.json
           sed -i "s/\"version\": \".*\"/\"version\": \"$new_version\"/" package.json
 
@@ -81,8 +84,8 @@ jobs:
       - name: Create Forgejo Release
         if: steps.version.outputs.new_tag != ''
         run: |
-          # Get the commit message for release body
-          commit_msg=$(git log -1 --pretty=%B | jq -Rs .)
+          # Read and escape commit message for JSON
+          commit_msg=$(cat /tmp/commit_msg.txt | sed 's/\\/\\\\/g' | sed 's/"/\\"/g' | sed ':a;N;$!ba;s/\n/\\n/g')
 
           curl -X POST \
             "${{ github.server_url }}/api/v1/repos/${{ github.repository }}/releases" \
@@ -91,9 +94,9 @@ jobs:
             -d "{
               \"tag_name\": \"${{ steps.version.outputs.new_tag }}\",
               \"name\": \"${{ steps.version.outputs.new_tag }}\",
-              \"body\": $commit_msg
+              \"body\": \"$commit_msg\"
             }"
-
+      - name: Deploy to VPS
       - run: |
           echo "${{ secrets.VPS_DEPLOY_USER_SSH_KEY }}" > /tmp/ssh_key
           chmod 600 /tmp/ssh_key
