@@ -15,6 +15,7 @@
 #           rm /tmp/ssh_key
 #
 #
+
 name: Deploy eolas-api
 on:
   push:
@@ -27,7 +28,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Determine version bump
+      - name: Determine version bump and update package.json
         id: version
         run: |
           latest_tag=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
@@ -38,7 +39,7 @@ jobs:
           version=${latest_tag#v}
           IFS='.' read -r major minor patch <<< "$version"
 
-          if echo "$commit_msg" | grep -q "BREAKING CHANGE:"; then
+          if echo "$commit_msg" | grep -qE "^major(\(.*\))?:|BREAKING CHANGE:"; then
             major=$((major + 1))
             minor=0
             patch=0
@@ -59,17 +60,17 @@ jobs:
           echo "new_tag=$new_tag" >> $GITHUB_OUTPUT
           echo "new_version=$new_version" >> $GITHUB_OUTPUT
 
-      - name: Update package.json version
+          # Update package.json
+          sed -i "s/\"version\": \".*\"/\"version\": \"$new_version\"/" package.json
+
+      - name: Commit version change
         if: steps.version.outputs.new_tag != ''
         run: |
-          # Update version in package.json
-          sed -i "s/\"version\": \".*\"/\"version\": \"${{ steps.version.outputs.new_version }}\"/" package.json
-
           git config user.name "forgejo-actions[bot]"
           git config user.email "forgejo-actions[bot]@noreply"
           git add package.json
-          git commit -m "chore: bump version to ${{ steps.version.outputs.new_tag }}" || true
-          git push origin main || true
+          git commit --amend --no-edit
+          git push -f origin main
 
       - name: Create and push tag
         if: steps.version.outputs.new_tag != ''
@@ -80,6 +81,9 @@ jobs:
       - name: Create Forgejo Release
         if: steps.version.outputs.new_tag != ''
         run: |
+          # Get the commit message for release body
+          commit_msg=$(git log -1 --pretty=%B | jq -Rs .)
+
           curl -X POST \
             "${{ github.server_url }}/api/v1/repos/${{ github.repository }}/releases" \
             -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
@@ -87,7 +91,7 @@ jobs:
             -d "{
               \"tag_name\": \"${{ steps.version.outputs.new_tag }}\",
               \"name\": \"${{ steps.version.outputs.new_tag }}\",
-              \"body\": \"Release ${{ steps.version.outputs.new_tag }}\"
+              \"body\": $commit_msg
             }"
 
       - run: |
