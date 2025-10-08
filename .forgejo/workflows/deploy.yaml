@@ -1,3 +1,20 @@
+# name: Deploy eolas-api
+# on:
+#   push:
+#     branches: [main]
+# jobs:
+#   deploy:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v3
+#       - run: |
+#           echo "${{ secrets.VPS_DEPLOY_USER_SSH_KEY }}" > /tmp/ssh_key
+#           chmod 600 /tmp/ssh_key
+#           ssh -i /tmp/ssh_key -o StrictHostKeyChecking=no ${{ vars.VPS_DEPLOY_USER }} "bash -c 'cd /var/www/eolas-api && rm -rf * .[^.]*'"
+#           scp -i /tmp/ssh_key -o StrictHostKeyChecking=no -r ./* ${{ vars.VPS_DEPLOY_USER }}:/var/www/eolas-api/
+#           rm /tmp/ssh_key
+#
+#
 name: Deploy eolas-api
 on:
   push:
@@ -7,6 +24,72 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Determine version bump
+        id: version
+        run: |
+          latest_tag=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
+          echo "Previous version: $latest_tag"
+
+          commit_msg=$(git log -1 --pretty=%B)
+
+          version=${latest_tag#v}
+          IFS='.' read -r major minor patch <<< "$version"
+
+          if echo "$commit_msg" | grep -q "BREAKING CHANGE:"; then
+            major=$((major + 1))
+            minor=0
+            patch=0
+          elif echo "$commit_msg" | grep -qE "^feat(\(.*\))?:"; then
+            minor=$((minor + 1))
+            patch=0
+          elif echo "$commit_msg" | grep -qE "^fix(\(.*\))?:"; then
+            patch=$((patch + 1))
+          else
+            echo "No version bump needed"
+            echo "new_tag=" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          new_tag="v${major}.${minor}.${patch}"
+          new_version="${major}.${minor}.${patch}"
+          echo "New version: $new_tag"
+          echo "new_tag=$new_tag" >> $GITHUB_OUTPUT
+          echo "new_version=$new_version" >> $GITHUB_OUTPUT
+
+      - name: Update package.json version
+        if: steps.version.outputs.new_tag != ''
+        run: |
+          # Update version in package.json
+          sed -i "s/\"version\": \".*\"/\"version\": \"${{ steps.version.outputs.new_version }}\"/" package.json
+
+          git config user.name "forgejo-actions[bot]"
+          git config user.email "forgejo-actions[bot]@noreply"
+          git add package.json
+          git commit -m "chore: bump version to ${{ steps.version.outputs.new_tag }}" || true
+          git push origin main || true
+
+      - name: Create and push tag
+        if: steps.version.outputs.new_tag != ''
+        run: |
+          git tag ${{ steps.version.outputs.new_tag }}
+          git push origin ${{ steps.version.outputs.new_tag }}
+
+      - name: Create Forgejo Release
+        if: steps.version.outputs.new_tag != ''
+        run: |
+          curl -X POST \
+            "${{ github.server_url }}/api/v1/repos/${{ github.repository }}/releases" \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d "{
+              \"tag_name\": \"${{ steps.version.outputs.new_tag }}\",
+              \"name\": \"${{ steps.version.outputs.new_tag }}\",
+              \"body\": \"Release ${{ steps.version.outputs.new_tag }}\"
+            }"
+
       - run: |
           echo "${{ secrets.VPS_DEPLOY_USER_SSH_KEY }}" > /tmp/ssh_key
           chmod 600 /tmp/ssh_key
