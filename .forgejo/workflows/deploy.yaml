@@ -81,21 +81,6 @@ jobs:
           git tag ${{ steps.version.outputs.new_tag }}
           git push origin ${{ steps.version.outputs.new_tag }}
 
-      - name: Create Forgejo Release
-        if: steps.version.outputs.new_tag != ''
-        run: |
-          # Read and escape commit message for JSON
-          commit_msg=$(cat /tmp/commit_msg.txt | sed 's/\\/\\\\/g' | sed 's/"/\\"/g' | sed ':a;N;$!ba;s/\n/\\n/g')
-
-          curl -X POST \
-            "${{ github.server_url }}/api/v1/repos/${{ github.repository }}/releases" \
-            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Content-Type: application/json" \
-            -d "{
-              \"tag_name\": \"${{ steps.version.outputs.new_tag }}\",
-              \"name\": \"${{ steps.version.outputs.new_tag }}\",
-              \"body\": \"$commit_msg\"
-            }"
       - name: Deploy to VPS
         run: |
           echo "${{ secrets.VPS_DEPLOY_USER_SSH_KEY }}" > /tmp/ssh_key
