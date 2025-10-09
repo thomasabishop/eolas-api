@@ -21,7 +21,10 @@ On pushes to `main`:
   - Patch: `fix: <commit description>`
   - Ignored keywords: `chore`, `test`, `refactor`, and anything else
 
+- This bumps the version in `package.json` and creates Git tag at this version.
+
 - SSH to VPS using `deploy` user and :
+
   - Purge existing source files at `var/www/eolas-api`,
   - Copy over new source files
   - TODO: restart Node server
