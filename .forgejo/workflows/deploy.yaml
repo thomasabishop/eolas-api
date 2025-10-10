@@ -63,7 +63,9 @@ jobs:
 
       - name: Deploy to VPS
         run: |
+          sudo apt-get update && sudo apt-get install -y rsync
           echo "${{ secrets.VPS_DEPLOY_USER_SSH_KEY }}" > /tmp/ssh_key
           chmod 600 /tmp/ssh_key
           rsync -avz --delete --exclude='.env' -e "ssh -i /tmp/ssh_key -o StrictHostKeyChecking=no" ./ ${{ vars.VPS_DEPLOY_USER }}:/var/www/eolas-api/
+          #scp -i /tmp/ssh_key -o StrictHostKeyChecking=no -r ./* ${{ vars.VPS_DEPLOY_USER }}:/var/www/eolas-api/
           rm /tmp/ssh_key
