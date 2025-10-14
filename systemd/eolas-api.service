@@ -1,0 +1,13 @@
+[Unit]
+Description=eolas-api
+After=network.target
+
+[Service]
+Type=simple
+User=deploy
+WorkingDirectory=
+ExecStart=/home/deploy/.nvm/versions/node/v24.10.0/bin/node npm run start
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
