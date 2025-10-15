@@ -67,4 +67,5 @@ jobs:
           echo "${{ secrets.VPS_DEPLOY_USER_SSH_KEY }}" > /tmp/ssh_key
           chmod 600 /tmp/ssh_key
           rsync -avz --delete --inplace --exclude='.env' -e "ssh -i /tmp/ssh_key -o StrictHostKeyChecking=no" ./ ${{ vars.VPS_DEPLOY_USER }}:/var/www/eolas-api/
+          npm install --omit=dev 
           rm /tmp/ssh_key
