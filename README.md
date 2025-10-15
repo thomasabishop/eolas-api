@@ -9,14 +9,11 @@ On pushes to `main`:
 - Bump version depending on commit keyword, create Git tag (if necessary) and
   automatically update [package.json](./package.json):
 
-- This updates the version in `package.json` and creates Git tag at this version.
-
 - Install `rsync` on the `ubuntu-latest` runner
 
 - `rysnc` over SSH to copy changed files from this repository to VPS deployment directory, excluding`.env`.
 
-- Restart eolas-api using `systemd`. See `/systemd/eolas-api.service` for copy
-  of file that runs service on VPS.
+- Restart running instance of `eolas-api` on VPS.
 
 ### Commit keywords
 
