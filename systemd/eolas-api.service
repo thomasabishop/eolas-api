@@ -6,7 +6,7 @@ After=network.target
 Type=simple
 User=deploy
 WorkingDirectory=/var/www/eolas-api
-ExecStart=/home/deploy/.nvm/versions/node/v24.10.0/bin/npm run start
+ExecStart=/home/deploy/.nvm/versions/node/v24.10.0/bin/node /var/www/eolas-api/src/index.js
 Restart=on-failure
 
 [Install]
