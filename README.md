@@ -34,6 +34,12 @@ On the VPS, `eolas-api` runs as a `systemd` service. This service is restarted a
 the deployment. See copy of this file at
 [systemd/eolas-api.service](./systemd/eolas-api.service).
 
+#### Logs
+
+```sh
+journalctl -u eolas-api.service --no-pager
+```
+
 ## API
 
 ### Entries
