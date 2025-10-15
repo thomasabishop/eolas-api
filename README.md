@@ -1,8 +1,11 @@
 ## Deployment
 
-Deployment is automated via Forgejo action. See `.forgejo` directory.
+Deployment is automated via Forgejo action. See `.forgejo` directory. Deployment actions are always executed by the `deploy` user on the VPS.
 
-Deployment actions are always executed by the `deploy` user on the VPS.
+**The application resides at `/var/www/eolas-api` on the VPS. The SQLite database
+file that the API reads from is stored at `/data/sqlite/eolas`.**
+
+### Automated pipeline
 
 On pushes to `main`:
 
