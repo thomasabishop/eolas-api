@@ -1,6 +1,6 @@
 ## Deployment
 
-Deployment is automated via Forgejo action. See [.forgejo/workflows/deploy.yml](./forgejo/workflows/deploy.yml).
+Deployment is automated via Forgejo action. See [.forgejo/workflows/deploy.yml](./.forgejo/workflows/deploy.yml).
 
 Deployment actions are always executed by the `deploy` user on the VPS.
 
@@ -26,7 +26,7 @@ On pushes to `main`:
 
 On the VPS, `eolas-api` runs as a `systemd` service. This service is restarted as part of
 the deployment. See copy of this file at
-[/systemd/eolas-api.service](./systemd/eolas-api.service).
+[systemd/eolas-api.service](./systemd/eolas-api.service).
 
 ## API
 
