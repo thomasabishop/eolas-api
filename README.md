@@ -1,6 +1,6 @@
 ## Deployment
 
-Deployment is automated via Forgejo action. See [.forgejo/workflows/deploy.yml](./.forgejo/workflows/deploy.yml).
+Deployment is automated via Forgejo action. See `.forgejo` directory.
 
 Deployment actions are always executed by the `deploy` user on the VPS.
 
