@@ -1,6 +1,6 @@
 ## Deployment
 
-Deployment is automated via Forgejo action (see `.forgejo/workflows/deploy.yml`).
+Deployment is automated via Forgejo action. See [.forgejo/workflows/deploy.yml](./forgejo/workflows/deploy.yml).
 
 Deployment actions are always executed by the `deploy` user on the VPS.
 
@@ -15,12 +15,18 @@ On pushes to `main`:
     - Ignored keywords: `chore`, `test`, `refactor`, and anything else
   - This updates the version in `package.json` and creates Git tag at this version.
 
-- Install `rsync` on the `ubuntu-latest` runner, then:
+- Install `rsync` on the `ubuntu-latest` runner
 
-  - Rsync over SSH to copy changed files from this repository to VPS deployment directory, excluding
-    `.env`
+- `rysnc` over SSH to copy changed files from this repository to VPS deployment directory, excluding`.env`.
 
-- Restart eolas-api using `systemd`
+- Restart eolas-api using `systemd`. See `/systemd/eolas-api.service` for copy
+  of file that runs service on VPS.
+
+### `systemd` service
+
+On the VPS, `eolas-api` runs as a `systemd` service. This service is restarted as part of
+the deployment. See copy of this file at
+[/systemd/eolas-api.service](./systemd/eolas-api.service).
 
 ## API
 
