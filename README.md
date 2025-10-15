@@ -6,14 +6,10 @@ Deployment actions are always executed by the `deploy` user on the VPS.
 
 On pushes to `main`:
 
-- Automate versioning and Git tagging:
+- Bump version depending on commit keyword, create Git tag (if necessary) and
+  automatically update [package.json](./package.json):
 
-  - Commit keyword corresponds to SemVer:
-    - Major: `major: <commit description>`,
-    - Minor: `feat: <commit description>`,
-    - Patch: `fix: <commit description>`
-    - Ignored keywords: `chore`, `test`, `refactor`, and anything else
-  - This updates the version in `package.json` and creates Git tag at this version.
+- This updates the version in `package.json` and creates Git tag at this version.
 
 - Install `rsync` on the `ubuntu-latest` runner
 
@@ -21,6 +17,16 @@ On pushes to `main`:
 
 - Restart eolas-api using `systemd`. See `/systemd/eolas-api.service` for copy
   of file that runs service on VPS.
+
+### Commit keywords
+
+In accordance with SemVer:
+
+- Major: `major: <commit description>`,
+- Minor: `feat: <commit description>`,
+- Patch: `fix: <commit description>`
+
+Ignored keywords: `chore`, `test`, `refactor`, and anything else.
 
 ### `systemd` service
 
