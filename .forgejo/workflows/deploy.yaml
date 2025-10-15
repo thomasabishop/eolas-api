@@ -63,9 +63,16 @@ jobs:
 
       - name: Deploy to VPS
         run: |
+          echo "⚡ INFO Installing rsync" 
           apt-get update && apt-get install -y rsync
+          echo "⚡ INFO Retrieving SSH key for deploy user" 
           echo "${{ secrets.VPS_DEPLOY_USER_SSH_KEY }}" > /tmp/ssh_key
           chmod 600 /tmp/ssh_key
+          echo "⚡ INFO Copy files (rsync)" 
           rsync -avz --delete --inplace --exclude='.env' -e "ssh -i /tmp/ssh_key -o StrictHostKeyChecking=no" ./ ${{ vars.VPS_DEPLOY_USER }}:/var/www/eolas-api/
-          npm install --omit=dev 
+          echo "⚡ INFO Run npm install on VPS" 
+          # npm install --omit=dev 
+          echo "⚡ INFO Restarting systemd service" 
+          # sudo systemctl daemon-reload
+          # sudo systemctl restart eolas-api
           rm /tmp/ssh_key
