@@ -77,7 +77,8 @@ jobs:
           rsync -avz --delete --inplace --exclude='.env' -e "ssh -i /tmp/ssh_key -o StrictHostKeyChecking=no" ./ ${{ vars.VPS_DEPLOY_USER }}:/var/www/eolas-api/
 
           echo "⚡ INFO Run npm install on VPS" 
-          ssh -i /tmp/ssh_key -o StrictHostKeyChecking=no ${{vars.VPS_DEPLOY_USER}} "bash -l -c 'cd /var/www/eolas-api && /home/deploy/.nvm/versions/node/v24.10.0/bin/npm install --omit=dev'"
+
+          ssh -i /tmp/ssh_key -o StrictHostKeyChecking=no ${{vars.VPS_DEPLOY_USER}} "bash -l -c 'source ~/.nvm/nvm.sh && cd /var/www/eolas-api && npm install --omit=dev'"
 
           echo "⚡ INFO Restarting service" 
           ssh -i /tmp/ssh_key -o StrictHostKeyChecking=no ${{vars.VPS_DEPLOY_USER}} "bash -l -c 'sudo /usr/bin/systemctl daemon-reload && sudo /usr/bin/systemctl start eolas-api.service'"
