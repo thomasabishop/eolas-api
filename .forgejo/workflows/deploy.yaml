@@ -70,13 +70,17 @@ jobs:
           echo "${{ secrets.VPS_DEPLOY_USER_SSH_KEY }}" > /tmp/ssh_key
           chmod 600 /tmp/ssh_key
 
-          echo "⚡ INFO Stopping server on VPS" 
+          echo "⚡ INFO Stopping service on VPS" 
           ssh -i /tmp/ssh_key -o StrictHostKeyChecking=no ${{vars.VPS_DEPLOY_USER}} sudo /usr/bin/systemctl stop eolas-api.service 
-          echo "⚡ INFO Copy files (rsync)" 
-          # rsync -avz --delete --inplace --exclude='.env' -e "ssh -i /tmp/ssh_key -o StrictHostKeyChecking=no" ./ ${{ vars.VPS_DEPLOY_USER }}:/var/www/eolas-api/
+
+          echo "⚡ INFO Copy updated sourcefile files via rsync" 
+          rsync -avz --delete --inplace --exclude='.env' -e "ssh -i /tmp/ssh_key -o StrictHostKeyChecking=no" ./ ${{ vars.VPS_DEPLOY_USER }}:/var/www/eolas-api/
+
           echo "⚡ INFO Run npm install on VPS" 
-          # SSH: npm install --omit=dev 
-          echo "⚡ INFO Restarting systemd service" 
-          # SSH: sudo /usr/bin/systemctl daemon-reload
-          # SSH: sudo /usr/bin/systemctl restart eolas-api.service
+          ssh -i /tmp/ssh_key -o StrictHostKeyChecking=no ${{vars.VPS_DEPLOY_USER}} cd /var/www/eolas-api && npm install --omit=dev  
+
+
+          echo "⚡ INFO Restarting service" 
+          ssh -i /tmp/ssh_key -o StrictHostKeyChecking=no ${{vars.VPS_DEPLOY_USER}} sudo /usr/bin/systemctl daemon-reload && sudo /usr/bin/systemctl start eolas-api.service
+
           rm /tmp/ssh_key
