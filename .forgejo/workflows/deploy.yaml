@@ -71,7 +71,7 @@ jobs:
           chmod 600 /tmp/ssh_key
 
           echo "⚡ INFO Stopping server on VPS" 
-          ssh -i /tmp/ssh_key ${{vars.VPS_DEPLOY_USER}} sudo /usr/bin/systemctl stop eolas-api.service 
+          ssh -i /tmp/ssh_key -o StrictHostKeyChecking=no ${{vars.VPS_DEPLOY_USER}} sudo /usr/bin/systemctl stop eolas-api.service 
           echo "⚡ INFO Copy files (rsync)" 
           # rsync -avz --delete --inplace --exclude='.env' -e "ssh -i /tmp/ssh_key -o StrictHostKeyChecking=no" ./ ${{ vars.VPS_DEPLOY_USER }}:/var/www/eolas-api/
           echo "⚡ INFO Run npm install on VPS" 
@@ -80,5 +80,3 @@ jobs:
           # SSH: sudo /usr/bin/systemctl daemon-reload
           # SSH: sudo /usr/bin/systemctl restart eolas-api.service
           rm /tmp/ssh_key
-
-          NEXT! add required Vars to systemd file
