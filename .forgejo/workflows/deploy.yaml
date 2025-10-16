@@ -79,8 +79,8 @@ jobs:
           echo "⚡ INFO Run npm install on VPS" 
           ssh -i /tmp/ssh_key -o StrictHostKeyChecking=no ${{vars.VPS_DEPLOY_USER}} cd /var/www/eolas-api && npm install --omit=dev  
 
-
           echo "⚡ INFO Restarting service" 
-          ssh -i /tmp/ssh_key -o StrictHostKeyChecking=no ${{vars.VPS_DEPLOY_USER}} sudo /usr/bin/systemctl daemon-reload && sudo /usr/bin/systemctl start eolas-api.service
+          ssh -i /tmp/ssh_key -o StrictHostKeyChecking=no ${{vars.VPS_DEPLOY_USER}} sudo /usr/bin/systemctl daemon-reload 
+          ssh -i /tmp/ssh_key -o StrictHostKeyChecking=no ${{vars.VPS_DEPLOY_USER}} sudo /usr/bin/systemctl start eolas-api.service
 
           rm /tmp/ssh_key
