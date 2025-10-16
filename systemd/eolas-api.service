@@ -6,7 +6,8 @@ After=network.target
 Type=simple
 User=deploy
 WorkingDirectory=/var/www/eolas-api
-ExecStart=/home/deploy/.nvm/versions/node/v24.10.0/bin/node /var/www/eolas-api/src/index.js
+Environment="NODE_OPTIONS=--experimental-sqlite"
+ExecStart=/home/deploy/.nvm/versions/node/v24.10.0/bin/node --env-file=.env /var/www/eolas-api/src/index.js
 Restart=on-failure
 
 [Install]
