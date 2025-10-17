@@ -14,6 +14,10 @@ app.use("/entries", entries)
 app.use("/tags", tags)
 
 app.listen(port, () => {
-	console.info(`TB-INFO eolas-api running on NodeJS ${process.version}`)
-	console.info(`TB-INFO eolas-api server running at http://localhost:${port}`)
+    console.info(`TB-INFO eolas-api running on NodeJS ${process.version}`)
+    console.info(`TB-INFO eolas-api server running at http://localhost:${port}`)
+})
+
+app.get("/health", (req, res) => {
+    res.status(200).json({ status: ok })
 })
