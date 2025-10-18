@@ -1,6 +1,6 @@
 {
 	"name": "eolas-api",
-	"version": "0.3.0",
+	"version": "0.3.1",
 	"description": "API for querying eolas-db, my Zettelkasten database",
 	"license": "ISC",
 	"author": "Thomas Bishop",
