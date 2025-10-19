@@ -10,57 +10,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Determine version bump and update package.json
-        id: version
-        run: |
-          latest_tag=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
-          echo "Previous version: $latest_tag"
-
-          commit_msg=$(git log -1 --pretty=%B)
-
-          version=${latest_tag#v}
-          IFS='.' read -r major minor patch <<< "$version"
-
-          if echo "$commit_msg" | grep -qE "^major(\(.*\))?:|BREAKING CHANGE:"; then
-            major=$((major + 1))
-            minor=0
-            patch=0
-          elif echo "$commit_msg" | grep -qE "^feat(\(.*\))?:"; then
-            minor=$((minor + 1))
-            patch=0
-          elif echo "$commit_msg" | grep -qE "^fix(\(.*\))?:"; then
-            patch=$((patch + 1))
-          else
-            echo "No version bump needed"
-            echo "new_tag=" >> $GITHUB_OUTPUT
-            exit 0
-          fi
-
-          new_tag="v${major}.${minor}.${patch}"
-          new_version="${major}.${minor}.${patch}"
-          echo "New version: $new_tag"
-          echo "new_tag=$new_tag" >> $GITHUB_OUTPUT
-          echo "new_version=$new_version" >> $GITHUB_OUTPUT
-
-          echo "$commit_msg" > /tmp/commit_msg.txt
-
-          sed -i "s/\"version\": \".*\"/\"version\": \"$new_version\"/" package.json
-
-      - name: Commit version change
-        if: steps.version.outputs.new_tag != ''
-        run: |
-          git config user.name "forgejo-actions[bot]"
-          git config user.email "forgejo-actions[bot]@noreply"
-          git add package.json
-          git commit --amend --no-edit
-          git push -f origin main
-
-      - name: Create and push tag
-        if: steps.version.outputs.new_tag != ''
-        run: |
-          git tag ${{ steps.version.outputs.new_tag }}
-          git push origin ${{ steps.version.outputs.new_tag }}
-
       - name: Deploy to VPS
         run: |
           echo "⚡ INFO Installing rsync" 
