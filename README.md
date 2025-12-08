@@ -1,44 +1,36 @@
+# eolas-api
+
+API written in NodeJS that queries my Zettelkasten, Eolas.
+
+It is a constituent part of my knowledge management system comprising [eolas](https://forgejo.systemsobscure.net/thomasabishop/eolas),
+[eolas-db](https://forgejo.systemsobscure.net/thomasabishop/eolas-db), and [eolas-app](https://forgejo.systemsobscure.net/thomasabishop/eolas-app).
+
+The application reads from an SQLite database managed via [eolas-db](https://forgejo.systemsobscure.net/thomasabishop/eolas-db).
+
+## Local development
+
+```sh
+npm install
+npm run start
+```
+
+This will start the local server at `http://localhost:4000`. It will look for
+stub database at `/data/eolas.db`.
+
 ## Deployment
 
-Deployment is automated via Forgejo action. See `.forgejo` directory. Deployment actions are always executed by the `deploy` user on the VPS.
+The API is deployed to my remote VPS, residing at `/var/www/eolas-api`. The
+database that it reads from is located at `/data/sqlite/eolas/eolas.db`.
 
-**The application resides at `/var/www/eolas-api` on the VPS. The SQLite database
-file that the API reads from is stored at `/data/sqlite/eolas`.**
+Deployment is automated via [Forgejo action](https://forgejo.systemsobscure.net/thomasabishop/eolas-api/src/branch/main/.forgejo/workflows/deploy.yaml). Deployment actions are always executed by the `deploy` user on the VPS.
 
-### Automated pipeline
-
-On pushes to `main`:
-
-- Bump version depending on commit keyword, create Git tag (if necessary) and
-  automatically update [package.json](./package.json):
-
-- Install `rsync` on the `ubuntu-latest` runner
-
-- `rysnc` over SSH to copy changed files from this repository to VPS deployment directory, excluding`.env`.
-
-- Restart running instance of `eolas-api` on VPS.
-
-### Commit keywords
-
-In accordance with SemVer:
-
-- Major: `major: <commit description>`,
-- Minor: `feat: <commit description>`,
-- Patch: `fix: <commit description>`
-
-Ignored keywords: `chore`, `test`, `refactor`, and anything else.
+The action script transfers the source files to the VPS and installs necessary
+packages. It also restarts the `eolas-api` systemd service on the VPS.
 
 ### `systemd` service
 
-On the VPS, `eolas-api` runs as a `systemd` service. This service is restarted as part of
-the deployment. See copy of this file at
-[systemd/eolas-api.service](./systemd/eolas-api.service).
-
-#### Logs
-
-```sh
-journalctl -u eolas-api.service --no-pager
-```
+On the VPS, `eolas-api` runs as a `systemd` service. See the
+[unit file](./systemd/eolas-api.service) for details.
 
 ## API
 
