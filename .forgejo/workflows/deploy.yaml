@@ -32,3 +32,19 @@ jobs:
           ssh -i /tmp/ssh_key -o StrictHostKeyChecking=no ${{vars.VPS_DEPLOY_USER}} "bash -l -c 'sudo /usr/bin/systemctl daemon-reload && sudo /usr/bin/systemctl start eolas-api.service'"
 
           rm /tmp/ssh_key
+
+      - name: Notify success
+        if: success()
+        run: |
+          curl -u thomas:${{ secrets.NTFY_PASSWORD }} \
+               -H "Tags: Forgejo Runner" \
+               -d "🟩 eolas-api successfully deployed" \
+                https://ntfy.systemsobscure.net/eolas
+
+      - name: Notify failure
+        if: failure()
+        run: |
+          curl -u thomas:${{ secrets.NTFY_PASSWORD }} \
+               -H "Tags: Forgejo Runner" \
+               -d "🟥 An error occurred deploying eolas-api. See Forgejo Action logs." \
+                https://ntfy.systemsobscure.net/eolas
