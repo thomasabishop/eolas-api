@@ -34,6 +34,47 @@ On the VPS, `eolas-api` runs as a `systemd` service. See the
 
 ## API
 
+### Search
+
+```
+GET /search/<search_term>
+```
+
+```json
+
+{
+  "count": 2,
+  "data": [
+    {
+      "entry": "Test_values_in_Bash",
+      "excerpt": "# <mark>Test</mark> values in Bash\n\n`<mark>test</mark>` is a built-in command that is used to compare values or determine whether\nsomething is the case.\n\nWe..."
+    },
+    {
+      "entry": "Testing_Python_code",
+      "excerpt": "...for a module called `lorem`, it will detzect the unit <mark>test</mark>\n  files `lorem_<mark>test</mark>.py` and `<mark>test</mark>_lorem.py`.\n- In order to detect tests..."
+    },
+```
+
+### Diagnostics
+
+#### Get broken links
+
+```
+GET /diagnostics/broken-links
+```
+
+```json
+{
+  "count": 1,
+  "data": [
+    {
+      "source_entry_title": "Reducing_fractions",
+      "broken_link_title": "Equivalent%20fractions"
+    }
+  ]
+}
+```
+
 ### Entries
 
 #### Get all entries
