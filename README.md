@@ -1,11 +1,14 @@
 # eolas-api
 
-API written in NodeJS that queries my Zettelkasten, Eolas.
+API for my technical knowledge base.
 
-It is a constituent part of my knowledge management system comprising [eolas](https://forgejo.systemsobscure.net/thomasabishop/eolas),
-[eolas-db](https://forgejo.systemsobscure.net/thomasabishop/eolas-db), and [eolas-app](https://forgejo.systemsobscure.net/thomasabishop/eolas-app).
+### Related projects
 
-The application reads from an SQLite database managed via [eolas-db](https://forgejo.systemsobscure.net/thomasabishop/eolas-db).
+#### [eolas-db](<>)
+
+#### [eolas-api](<>)
+
+#### [eolas-app](<>)
 
 ## Local development
 
@@ -14,23 +17,9 @@ npm install
 npm run start
 ```
 
-This will start the local server at `http://localhost:4000`. It will look for
+This will start the local server at `http://localhost:3001`. It will look for
 stub database at `/data/eolas.db`.
 
-## Deployment
-
-The API is deployed to my remote VPS, residing at `/var/www/eolas-api`. The
-database that it reads from is located at `/data/sqlite/eolas/eolas.db`.
-
-Deployment is automated via [Forgejo action](https://forgejo.systemsobscure.net/thomasabishop/eolas-api/src/branch/main/.forgejo/workflows/deploy.yaml). Deployment actions are always executed by the `deploy` user on the VPS.
-
-The action script transfers the source files to the VPS and installs necessary
-packages. It also restarts the `eolas-api` systemd service on the VPS.
-
-### `systemd` service
-
-On the VPS, `eolas-api` runs as a `systemd` service. See the
-[unit file](./systemd/eolas-api.service) for details.
 
 ## API
 
