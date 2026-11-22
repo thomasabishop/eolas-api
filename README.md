@@ -6,7 +6,7 @@ API for my technical knowledge base.
 
 #### [eolas-db](https://github.com/thomasabishop/eolas-db)
 
-#### [eolas-app]()
+#### [eolas-app](https://github.com/thomasabishop/eolas-app)
 
 ## Local development
 
