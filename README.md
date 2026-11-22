@@ -4,9 +4,7 @@ API for my technical knowledge base.
 
 ### Related projects
 
-#### [eolas-db]()
-
-#### [eolas-api]()
+#### [eolas-db](https://github.com/thomasabishop/eolas-db)
 
 #### [eolas-app]()
 
