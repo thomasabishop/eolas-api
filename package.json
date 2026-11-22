@@ -8,8 +8,8 @@
   "imports": {},
   "main": "index.js",
   "scripts": {
-    "dev": "NODE_OPTIONS='--experimental-sqlite' node --watch --env-file=.env src/index.js",
-    "start": "NODE_OPTIONS='--experimental-sqlite' node --env-file=.env src/index.js",
+    "dev": "node --watch --env-file=.env src/index.js",
+    "start": "node --env-file=.env src/index.js",
     "build": "esbuild src/index.js --bundle --platform=node --format=cjs --outfile=dist/eolas-api.cjs && node --build-sea sea-config.json",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
