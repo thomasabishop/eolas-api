@@ -1,0 +1,6 @@
+{
+  "main": "dist/eolas-api.cjs",
+  "output": "dist/eolas-api",
+  "disableExperimentalSEAWarning": true,
+  "useCodeCache": true
+}

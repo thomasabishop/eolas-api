@@ -1,26 +1,27 @@
 {
-	"name": "eolas-api",
-	"version": "0.0.0",
-	"description": "API for querying eolas-db, my Zettelkasten database",
-	"license": "ISC",
-	"author": "Thomas Bishop",
-	"type": "module",
-	"imports": {},
-	"main": "index.js",
-	"scripts": {
-		"dev": "NODE_OPTIONS='--experimental-sqlite' node --watch --env-file=.env src/index.js",
-		"start": "NODE_OPTIONS='--experimental-sqlite' node --env-file=.env src/index.js",
-		"test": "echo \"Error: no test specified\" && exit 1"
-	},
-	"dependencies": {
-		"cors": "^2.8.5",
-		"express": "^4.21.2",
-		"morgan": "^1.10.1"
-	},
-	"devDependencies": {
-		"eslint": "^9.20.0",
-		"eslint-config-prettier": "^10.0.1",
-		"eslint-plugin-prettier": "^5.2.3",
-		"prettier": "^3.5.0"
-	}
+  "name": "eolas-api",
+  "version": "0.0.0",
+  "description": "API for querying eolas-db, my Zettelkasten database",
+  "license": "ISC",
+  "author": "Thomas Bishop",
+  "type": "module",
+  "imports": {},
+  "main": "index.js",
+  "scripts": {
+    "dev": "NODE_OPTIONS='--experimental-sqlite' node --watch --env-file=.env src/index.js",
+    "start": "NODE_OPTIONS='--experimental-sqlite' node --env-file=.env src/index.js",
+    "build": "esbuild src/index.js --bundle --platform=node --format=cjs --outfile=dist/eolas-api.cjs && node --build-sea sea-config.json",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "morgan": "^1.10.1"
+  },
+  "devDependencies": {
+    "eslint": "^9.20.0",
+    "eslint-config-prettier": "^10.0.1",
+    "eslint-plugin-prettier": "^5.2.3",
+    "prettier": "^3.5.0"
+  }
 }

@@ -4,11 +4,11 @@ API for my technical knowledge base.
 
 ### Related projects
 
-#### [eolas-db](<>)
+#### [eolas-db]()
 
-#### [eolas-api](<>)
+#### [eolas-api]()
 
-#### [eolas-app](<>)
+#### [eolas-app]()
 
 ## Local development
 
@@ -20,6 +20,17 @@ npm run start
 This will start the local server at `http://localhost:3001`. It will look for
 stub database at `/data/eolas.db`.
 
+## Generate single executable (deployable to server)
+
+I leverage Node's [single executable applications](https://nodejs.org/api/single-executable-applications.html) functionality to generate a
+single file version of the application that can easily be transferred to the
+target server.
+
+```
+npm run build
+```
+
+Generates executable at `dist/eolas-api`
 
 ## API
 
